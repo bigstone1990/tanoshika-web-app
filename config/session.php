@@ -88,6 +88,8 @@ return [
 
     'table' => env('SESSION_TABLE', 'sessions'),
 
+    'table_admin' => env('SESSION_TABLE_ADMIN', 'admin_sessions'),
+
     /*
     |--------------------------------------------------------------------------
     | Session Cache Store
@@ -130,6 +132,11 @@ return [
     'cookie' => env(
         'SESSION_COOKIE',
         Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+    ),
+
+    'cookie_admin' => env(
+        'SESSION_COOKIE_ADMIN',
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_session_admin'
     ),
 
     /*

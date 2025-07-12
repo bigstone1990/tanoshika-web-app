@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\User\Settings\PasswordController;
-use App\Http\Controllers\User\Settings\ProfileController;
+use App\Http\Controllers\Admin\Settings\PasswordController;
+use App\Http\Controllers\Admin\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::name('user.')->middleware('auth:users')->group(function () {
-    Route::redirect('settings', '/settings/profile');
+Route::prefix('admin')->name('admin.')->middleware('auth:admins')->group(function () {
+    Route::redirect('settings', '/admin/settings/profile');
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -16,6 +16,6 @@ Route::name('user.')->middleware('auth:users')->group(function () {
     Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::get('settings/appearance', function () {
-        return Inertia::render('user/settings/appearance');
+        return Inertia::render('admin/settings/appearance');
     })->name('appearance');
 });

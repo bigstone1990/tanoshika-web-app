@@ -3,13 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
-
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::name('user.')->middleware(['auth:users', 'verified'])->group(function () {
+    Route::get('', function () {
+        return Inertia::render('user/dashboard');
+    })->name('top');
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('user/dashboard');
     })->name('dashboard');
 });
 

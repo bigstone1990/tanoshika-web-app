@@ -6,7 +6,7 @@ use Inertia\Inertia;
 Route::name('user.')->middleware(['auth:user', 'verified'])->group(function () {
     Route::get('', function () {
         return Inertia::render('user/dashboard');
-    })->name('top');
+    })->name('home');
     Route::get('dashboard', function () {
         return Inertia::render('user/dashboard');
     })->name('dashboard');

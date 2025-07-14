@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::middleware('web')
-                ->group(__DIR__.'/../routes/admin.php');
+                ->group(__DIR__ . '/../routes/admin.php');
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
@@ -31,32 +31,30 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->redirectGuestsTo(function (Request $request) {
-            if (request()->routeIs('admin.*')) {
+            if ($request->routeIs('admin.*')) {
                 return $request->expectsJson() ? null : route('admin.login');
-            }
-            else {
+            } else {
                 return $request->expectsJson() ? null : route('user.login');
             }
         });
         $middleware->redirectUsersTo(function () {
-            if (Auth::guard('users')->check()) {
+            if (Auth::guard('admin')->check()) {
+                return route('admin.dashboard');
+            } elseif (Auth::guard('user')->check()) {
                 return route('user.dashboard');
             }
-            elseif (Auth::guard('admins')->check()) {
-                return route('admin.dashboard');
-            }
-        
+
             return null;
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->respond(function (Response $response) {
             if ($response->getStatusCode() === 419) {
-                return Inertia::render('Redirect', [
+                return Inertia::render('redirect', [
                     'redirectTo' => url()->previous(),
                 ]);
             }
-    
+
             return $response;
         });
     })->create();

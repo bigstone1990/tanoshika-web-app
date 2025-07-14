@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'verified'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified'])->group(function () {
     Route::get('', function () {
         return Inertia::render('admin/dashboard');
     })->name('top');

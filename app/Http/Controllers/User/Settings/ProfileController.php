@@ -51,7 +51,7 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        Auth::guard('users')->logout();
+        Auth::guard('user')->logout();
 
         $user->delete();
 

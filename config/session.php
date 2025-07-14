@@ -88,7 +88,7 @@ return [
 
     'table' => env('SESSION_TABLE', 'sessions'),
 
-    'table_admin' => env('SESSION_TABLE_ADMIN', 'admin_sessions'),
+    'admin_table' => env('SESSION_TABLE_ADMIN', 'admin_sessions'),
 
     /*
     |--------------------------------------------------------------------------
@@ -134,9 +134,9 @@ return [
         Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
-    'cookie_admin' => env(
+    'admin_cookie' => env(
         'SESSION_COOKIE_ADMIN',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session_admin'
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_admin_session'
     ),
 
     /*

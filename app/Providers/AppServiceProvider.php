@@ -21,11 +21,18 @@ class AppServiceProvider extends ServiceProvider
     {
         // request()->routeIs()の判定は不可のため
         if (request()->is('admin*')) {
-            config(['session.table' => config('session.table_admin')]);
-            config(['session.cookie' => config('session.cookie_admin')]);
-        } else {
-            config(['session.table' => config('session.table')]);
-            config(['session.cookie' => config('session.cookie')]);
+            $this->configureAdminSession();
+        }
+    }
+
+    private function configureAdminSession(): void
+    {
+        if ($adminTable = config('session.admin_table')) {
+            config(['session.table' => $adminTable]);
+        }
+        
+        if ($adminCookie = config('session.admin_cookie')) {
+            config(['session.cookie' => $adminCookie]);
         }
     }
 }

@@ -5,7 +5,7 @@ use App\Http\Controllers\User\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::name('user.')->middleware('auth:users')->group(function () {
+Route::name('user.')->middleware('auth:user')->group(function () {
     Route::redirect('settings', '/settings/profile');
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');

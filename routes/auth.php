@@ -10,7 +10,7 @@ use App\Http\Controllers\User\Auth\RegisteredUserController;
 use App\Http\Controllers\User\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::name('user.')->middleware('guest:users')->group(function () {
+Route::name('user.')->middleware('guest:user')->group(function () {
     // Route::get('register', [RegisteredUserController::class, 'create'])
     //     ->name('register');
 
@@ -34,7 +34,7 @@ Route::name('user.')->middleware('guest:users')->group(function () {
         ->name('password.store');
 });
 
-Route::name('user.')->middleware('auth:users')->group(function () {
+Route::name('user.')->middleware('auth:user')->group(function () {
     // Route::get('verify-email', EmailVerificationPromptController::class)
     //     ->name('verification.notice');
 

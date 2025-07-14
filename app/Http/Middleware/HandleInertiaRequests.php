@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
-        $guard = $request->routeIs('admin.*') ? 'admins' : 'users';
+        $guard = $request->routeIs('admin.*') ? 'admin' : 'user';
         $user = Auth::guard($guard)->user();
 
         return [

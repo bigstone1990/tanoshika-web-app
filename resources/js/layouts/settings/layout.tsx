@@ -7,24 +7,6 @@ import { Link, usePage } from '@inertiajs/react';
 import { type PropsWithChildren, useMemo } from 'react';
 import { type SharedData } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Profile',
-        href: '/settings/profile',
-        icon: null,
-    },
-    {
-        title: 'Password',
-        href: '/settings/password',
-        icon: null,
-    },
-    {
-        title: 'Appearance',
-        href: '/settings/appearance',
-        icon: null,
-    },
-];
-
 export default function SettingsLayout({ children }: PropsWithChildren) {
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
@@ -77,7 +59,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
     return (
         <div className="px-4 py-6">
-            <Heading title="設定" description="プロフィールとアカウント設定を管理する" />
+            <Heading title="設定" description="プロフィール設定とアカウント設定を管理する" />
 
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">

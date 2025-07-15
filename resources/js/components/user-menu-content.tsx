@@ -7,9 +7,10 @@ import { LogOut, Settings } from 'lucide-react';
 
 interface UserMenuContentProps {
     user: User;
+    guard: 'admin' | 'user'
 }
 
-export function UserMenuContent({ user }: UserMenuContentProps) {
+export function UserMenuContent({ user, guard }: UserMenuContentProps) {
     const cleanup = useMobileNavigation();
 
     const handleLogout = () => {
@@ -27,17 +28,17 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={cleanup}>
+                    <Link className="block w-full" href={guard === 'admin' ? route('admin.profile.edit') : route('user.profile.edit')} as="button" prefetch onClick={cleanup}>
                         <Settings className="mr-2" />
-                        Settings
+                        設定
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-                <Link className="block w-full" method="post" href={route('logout')} as="button" onClick={handleLogout}>
+                <Link className="block w-full" method="post" href={guard === 'admin' ? route('admin.logout') : route('user.logout')} as="button" onClick={handleLogout}>
                     <LogOut className="mr-2" />
-                    Log out
+                    ログアウト
                 </Link>
             </DropdownMenuItem>
         </>

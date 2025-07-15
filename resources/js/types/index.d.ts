@@ -3,6 +3,7 @@ import type { Config } from 'ziggy-js';
 
 export interface Auth {
     user: User;
+    guard: 'admin' | 'user';
 }
 
 export interface BreadcrumbItem {

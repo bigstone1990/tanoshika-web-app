@@ -54,7 +54,7 @@ export default function Password() {
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="パスワードの更新" description="アカウントの安全を保つため、十分に長くランダムなパスワードを使用してください" />
+                    <HeadingSmall title="パスワード設定" description="アカウントの安全を保つため、十分に長くランダムなパスワードを使用してください" />
 
                     <form onSubmit={updatePassword} className="space-y-6">
                         <div className="grid gap-2">

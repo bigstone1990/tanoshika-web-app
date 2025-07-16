@@ -31,7 +31,7 @@ export default function FlashMessage() {
                 window.history.replaceState(state, '')
             }
         })
-    }, [id])
+    }, [id, message, status])
 
     return <Toaster />
 }

@@ -19,6 +19,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // request()->routeIs()の判定は不可のため
+        if (request()->is('admin*')) {
+            $this->configureAdminSession();
+        }
+    }
+
+    private function configureAdminSession(): void
+    {
+        if ($adminTable = config('session.admin_table')) {
+            config(['session.table' => $adminTable]);
+        }
+        
+        if ($adminCookie = config('session.admin_cookie')) {
+            config(['session.cookie' => $adminCookie]);
+        }
     }
 }

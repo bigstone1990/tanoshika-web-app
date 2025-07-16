@@ -30,6 +30,7 @@ export interface SharedData {
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
     [key: string]: unknown;
+    flashMessage: FlashMessage;
 }
 
 export interface User {
@@ -44,4 +45,10 @@ export interface User {
     kana: string; // 共通
     office_id?: number | null; // User用
     role?: number | null; // User用
+}
+
+export interface FlashMessage {
+    id: string | null;
+    message: string | null;
+    status: string | null;
 }

@@ -10,6 +10,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 
+use App\Models\Admin;
+
 class AdminController extends Controller
 {
     /**
@@ -17,7 +19,13 @@ class AdminController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('admin/account/admin/index');
+        $admins = Admin::select('id', 'name', 'kana', 'email')
+            ->orderBy('id')
+            ->get();
+
+        return Inertia::render('admin/account/admin/index', [
+            'admins' => $admins,
+        ]);
     }
 
     /**

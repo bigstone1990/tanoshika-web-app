@@ -52,3 +52,5 @@ export interface FlashMessage {
     message: string | null;
     status: string | null;
 }
+
+export * from './admin';

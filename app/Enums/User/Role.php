@@ -12,6 +12,7 @@ enum Role: int
         return match ($this) {
             self::STAFF => 'スタッフ',
             self::MEMBER => 'メンバー',
+            default => '未設定',
         };
     }
 

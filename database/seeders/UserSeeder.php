@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'スタッフ1',
-                'kana' => 'すたっふいち',
+                'kana' => 'スタッフ1',
                 'email' => 'staff1@test.com',
                 'password' => Hash::make('password'),
                 'role' => 1,
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'スタッフ2',
-                'kana' => 'すたっふに',
+                'kana' => 'スタッフ2',
                 'email' => 'staff2@test.com',
                 'password' => Hash::make('password'),
                 'role' => 1,
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'スタッフ3',
-                'kana' => 'すたっふさん',
+                'kana' => 'スタッフ3',
                 'email' => 'staff3@test.com',
                 'password' => Hash::make('password'),
                 'role' => 1,
@@ -49,9 +49,9 @@ class UserSeeder extends Seeder
                 'updated_at' => $datetime,
             ],
             [
-                'office_id' => 1,
+                'office_id' => 2,
                 'name' => 'スタッフ4',
-                'kana' => 'すたっふよん',
+                'kana' => 'スタッフ4',
                 'email' => 'staff4@test.com',
                 'password' => Hash::make('password'),
                 'role' => 1,
@@ -59,19 +59,19 @@ class UserSeeder extends Seeder
                 'updated_at' => $datetime,
             ],
             [
-                'office_id' => 1,
+                'office_id' => null,
                 'name' => 'スタッフ5',
-                'kana' => 'すたっふご',
+                'kana' => 'スタッフ5',
                 'email' => 'staff5@test.com',
                 'password' => Hash::make('password'),
-                'role' => 1,
+                'role' => null,
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ],
             [
                 'office_id' => 1,
                 'name' => 'メンバー1',
-                'kana' => 'めんばーいち',
+                'kana' => 'メンバー1',
                 'email' => 'member1@test.com',
                 'password' => Hash::make('password'),
                 'role' => 9,
@@ -81,7 +81,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'メンバー2',
-                'kana' => 'めんばーに',
+                'kana' => 'メンバー2',
                 'email' => 'member2@test.com',
                 'password' => Hash::make('password'),
                 'role' => 9,
@@ -91,7 +91,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'メンバー3',
-                'kana' => 'めんばーさん',
+                'kana' => 'メンバー3',
                 'email' => 'member3@test.com',
                 'password' => Hash::make('password'),
                 'role' => 9,
@@ -101,7 +101,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'メンバー4',
-                'kana' => 'めんばーよん',
+                'kana' => 'メンバー4',
                 'email' => 'member4@test.com',
                 'password' => Hash::make('password'),
                 'role' => 9,
@@ -111,7 +111,7 @@ class UserSeeder extends Seeder
             [
                 'office_id' => 1,
                 'name' => 'メンバー5',
-                'kana' => 'めんばーご',
+                'kana' => 'メンバー5',
                 'email' => 'member5@test.com',
                 'password' => Hash::make('password'),
                 'role' => 9,

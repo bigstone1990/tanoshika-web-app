@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
         DB::table('admins')->insert([
             [
                 'name' => '管理者1',
-                'kana' => 'かんりしゃいち',
+                'kana' => 'カンリシャ1',
                 'email' => 'admin1@test.com',
                 'password' => Hash::make('password'),
                 'created_at' => $datetime,
@@ -28,7 +28,7 @@ class AdminSeeder extends Seeder
             ],
             [
                 'name' => '管理者2',
-                'kana' => 'かんりしゃに',
+                'kana' => 'カンリシャ2',
                 'email' => 'admin2@test.com',
                 'password' => Hash::make('password'),
                 'created_at' => $datetime,
@@ -36,7 +36,7 @@ class AdminSeeder extends Seeder
             ],
             [
                 'name' => '管理者3',
-                'kana' => 'かんりしゃさん',
+                'kana' => 'カンリシャ3',
                 'email' => 'admin3@test.com',
                 'password' => Hash::make('password'),
                 'created_at' => $datetime,
@@ -44,7 +44,7 @@ class AdminSeeder extends Seeder
             ],
             [
                 'name' => '管理者4',
-                'kana' => 'かんりしゃよん',
+                'kana' => 'カンリシャ4',
                 'email' => 'admin4@test.com',
                 'password' => Hash::make('password'),
                 'created_at' => $datetime,
@@ -52,7 +52,7 @@ class AdminSeeder extends Seeder
             ],
             [
                 'name' => '管理者5',
-                'kana' => 'かんりしゃご',
+                'kana' => 'カンリシャ5',
                 'email' => 'admin5@test.com',
                 'password' => Hash::make('password'),
                 'created_at' => $datetime,

@@ -19,31 +19,31 @@ class OfficeSeeder extends Seeder
         DB::table('offices')->insert([
             [
                 'name' => 'オフィス1',
-                'kana' => 'おふぃすいち',
+                'kana' => 'オフィス1',
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ],
             [
                 'name' => 'オフィス2',
-                'kana' => 'おふぃすに',
+                'kana' => 'オフィス2',
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ],
             [
                 'name' => 'オフィス3',
-                'kana' => 'おふぃすさん',
+                'kana' => 'オフィス3',
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ],
             [
                 'name' => 'オフィス4',
-                'kana' => 'おふぃすよん',
+                'kana' => 'オフィス4',
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ],
             [
                 'name' => 'オフィス5',
-                'kana' => 'おふぃすご',
+                'kana' => 'オフィス5',
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ],

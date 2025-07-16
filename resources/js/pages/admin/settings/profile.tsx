@@ -22,7 +22,7 @@ type ProfileForm = {
     email: string;
 };
 
-export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+export default function Profile({ mustVerifyEmail, status, role }: { mustVerifyEmail: boolean; status?: string; role: string }) {
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
@@ -47,12 +47,34 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
+                            <Label htmlFor="role">種別</Label>
+
+                            <Input
+                                id="role"
+                                className="mt-1 block w-full"
+                                value={role}
+                                disabled
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
                             <Label htmlFor="name">名前</Label>
 
                             <Input
                                 id="name"
                                 className="mt-1 block w-full"
                                 value={auth.user.name}
+                                disabled
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="kana">カナ</Label>
+
+                            <Input
+                                id="kana"
+                                className="mt-1 block w-full"
+                                value={auth.user.kana}
                                 disabled
                             />
                         </div>

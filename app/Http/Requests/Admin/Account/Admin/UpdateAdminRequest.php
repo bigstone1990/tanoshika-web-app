@@ -11,7 +11,7 @@ class UpdateAdminRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,16 @@ class UpdateAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:50'],
+            'kana' => ['required', 'string', 'regex:/^[ァ-ヶー０-９0-9\x{3000}\x{0020}]+$/u', 'max:100'],
+            'updated_at' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'kana.regex' => 'カナは、カタカナ、全角・半角スペース、全角・半角数字のみで入力してください。',
         ];
     }
 }

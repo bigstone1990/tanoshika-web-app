@@ -9,6 +9,13 @@ use App\Http\Requests\Admin\Account\Admin\UpdateAdminRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Exception;
+use App\Jobs\SendAdminCreatedMail;
+use App\Exceptions\OptimisticLockException;
 
 use App\Models\Admin;
 
@@ -39,9 +46,37 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAdminRequest $request): RedirectResponse
     {
-        dd($request);
+        try {
+            $password = Str::random(8);
+            $admin = null;
+
+            DB::transaction(function () use ($request, &$admin, $password) {
+                $admin = Admin::create([
+                    'name' => $request->name,
+                    'kana' => $request->kana,
+                    'email' => $request->email,
+                    'password' => Hash::make($password),
+                    'creator_id' => Auth::guard('admin')->id(),
+                    'updater_id' => Auth::guard('admin')->id(),
+                ]);
+            });
+
+            SendAdminCreatedMail::dispatch($admin, $password);
+
+            return to_route('admin.account.admins.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '登録しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '登録に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 
     /**

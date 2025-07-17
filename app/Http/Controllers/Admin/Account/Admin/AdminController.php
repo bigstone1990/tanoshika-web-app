@@ -103,9 +103,17 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Admin $admin): Response
     {
-        //
+        return Inertia::render('admin/account/admin/edit', [
+            'admin' => [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'kana' => $admin->kana,
+                'email' => $admin->email,
+                'updated_at' => $admin->updated_at->format('Y-m-d H:i:s'),
+            ],
+        ]);
     }
 
     /**
@@ -113,7 +121,7 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($request);
     }
 
     /**

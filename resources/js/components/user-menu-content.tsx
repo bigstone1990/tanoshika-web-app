@@ -7,7 +7,7 @@ import { LogOut, Settings } from 'lucide-react';
 
 interface UserMenuContentProps {
     user: User;
-    guard: 'admin' | 'user'
+    guard: 'admin' | 'user';
 }
 
 export function UserMenuContent({ user, guard }: UserMenuContentProps) {

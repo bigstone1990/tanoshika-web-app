@@ -27,7 +27,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 href: '/admin/settings/appearance',
                 icon: null,
             },
-        ]
+        ];
 
         const userSidebarNavItems: NavItem[] = [
             {
@@ -45,7 +45,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 href: '/settings/appearance',
                 icon: null,
             },
-        ]
+        ];
 
         return auth.guard === 'admin' ? adminSidebarNavItems : userSidebarNavItems;
     }, [auth.guard]);

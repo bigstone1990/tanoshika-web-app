@@ -7,7 +7,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { BookOpenText, Folder, House, LayoutGrid, UserPlus } from 'lucide-react';
 import AppLogo from './app-logo';
 import { type SharedData } from '@/types';
-import { useMemo } from 'react'
+import { useMemo } from 'react';
 
 const footerNavItems: NavItem[] = [
     {
@@ -37,7 +37,7 @@ export function AppSidebar() {
                 href: '/admin/account/admins',
                 icon: UserPlus,
             },
-        ]
+        ];
 
         const userMainNavItems: NavItem[] = [
             {
@@ -45,7 +45,7 @@ export function AppSidebar() {
                 href: '/dashboard',
                 icon: LayoutGrid,
             },
-        ]
+        ];
 
         return auth.guard === 'admin' ? adminMainNavItems : userMainNavItems;
     }, [auth.guard]);

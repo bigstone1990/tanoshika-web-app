@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('kana');
+            $table->foreignId('creator_id')->nullable()->constrained('admins')->nullOnDelete();
+            $table->foreignId('updater_id')->nullable()->constrained('admins')->nullOnDelete();
             $table->timestamps();
         });
     }

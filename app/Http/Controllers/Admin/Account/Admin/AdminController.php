@@ -82,9 +82,22 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Admin $admin): Response
     {
-        //
+        $admin->load(['creator', 'updater']);
+
+        return Inertia::render('admin/account/admin/show', [
+            'admin' => [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'kana' => $admin->kana,
+                'email' => $admin->email,
+                'created_at' => $admin->created_at->format('Y-m-d H:i:s'),
+                'creator' => $admin->creator->name,
+                'updated_at'=> $admin->updated_at->format('Y-m-d H:i:s'),
+                'updater' => $admin->updater->name,
+            ],
+        ]);
     }
 
     /**

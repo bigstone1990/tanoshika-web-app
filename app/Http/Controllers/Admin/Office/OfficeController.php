@@ -73,9 +73,21 @@ class OfficeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Office $office): Response
     {
-        //
+        $office->load(['creator', 'updater']);
+
+        return Inertia::render('admin/office/show', [
+            'office' => [
+                'id' => $office->id,
+                'name' => $office->name,
+                'kana' => $office->kana,
+                'created_at' => $office->created_at->format('Y-m-d H:i:s'),
+                'creator' => $office->creator->name,
+                'updated_at'=> $office->updated_at->format('Y-m-d H:i:s'),
+                'updater' => $office->updater->name,
+            ],
+        ]);
     }
 
     /**

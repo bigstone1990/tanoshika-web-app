@@ -108,9 +108,39 @@ class OfficeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateOfficeRequest $request, Office $office): RedirectResponse
     {
-        dd($request);
+        try {
+            DB::transaction(function () use ($request, $office) {
+                if ($office->updated_at->format('Y-m-d H:i:s') !== $request->updated_at) {
+                    throw new OptimisticLockException;
+                }
+
+                $office->name = $request->name;
+                $office->kana = $request->kana;
+                $office->updater_id = Auth::guard('admin')->id();
+
+                $office->save();
+            });
+
+            return to_route('admin.offices.show', ['office' => $office->id])->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '更新しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (OptimisticLockException $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => $e->getMessage(),
+                'flash_status' => 'error',
+            ])->withInput();
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '更新に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 
     /**

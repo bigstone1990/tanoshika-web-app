@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpenText, Folder, House, LayoutGrid, UserPlus } from 'lucide-react';
+import { BookOpenText, Building, Folder, House, LayoutGrid, UserPlus } from 'lucide-react';
 import AppLogo from './app-logo';
 import { type SharedData } from '@/types';
 import { useMemo } from 'react';
@@ -36,6 +36,11 @@ export function AppSidebar() {
                 title: "管理者管理",
                 href: '/admin/account/admins',
                 icon: UserPlus,
+            },
+            {
+                title: "事業所管理",
+                href: '/admin/offices',
+                icon: Building,
             },
         ];
 

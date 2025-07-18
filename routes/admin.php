@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\Account\Admin\AdminController;
+use App\Http\Controllers\Admin\Office\OfficeController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified'])->group(function () {
     Route::redirect('', '/admin/dashboard')->name('home');
@@ -14,6 +15,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified'])->
         Route::resource('admins', AdminController::class);
         Route::post('admins/bulk-delete', [AdminController::class, 'bulkDestroy'])->name('admins.bulk-destroy');
     });
+
+    Route::resource('offices', OfficeController::class);
 });
 
 require __DIR__.'/adminSettings.php';

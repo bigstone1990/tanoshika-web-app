@@ -48,7 +48,7 @@ export default function Edit({ admin }: EditProps) {
                 <section className="max-w-xl">
                     <header className="flex flex-col space-y-1.5">
                         <h2 className="font-semibold tracking-tight text-xl">
-                            管理者変種
+                            管理者編集
                         </h2>
 
                         <p className="text-sm text-muted-foreground">
@@ -59,7 +59,7 @@ export default function Edit({ admin }: EditProps) {
                     <form onSubmit={submit} className="mt-6">
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">ID</Label>
+                                <Label htmlFor="id">ID</Label>
 
                                 <Input
                                     id="id"

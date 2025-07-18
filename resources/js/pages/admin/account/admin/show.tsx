@@ -1,8 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { type ShowAdmin } from '@/types';
@@ -41,7 +39,7 @@ export default function Show({ admin }: ShowProps) {
                     <div className="mt-6">
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">ID</Label>
+                                <Label htmlFor="id">ID</Label>
 
                                 <Input
                                     id="id"

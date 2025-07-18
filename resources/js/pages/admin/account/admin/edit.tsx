@@ -6,6 +6,17 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { type EditAdmin } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -30,7 +41,7 @@ interface EditProps {
 }
 
 export default function Edit({ admin }: EditProps) {
-    const { data, setData, put, processing, errors } = useForm<Required<FormDataType>>({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<Required<FormDataType>>({
         name: admin.name,
         kana: admin.kana,
         updated_at: admin.updated_at,
@@ -40,6 +51,10 @@ export default function Edit({ admin }: EditProps) {
         e.preventDefault();
         put(route('admin.account.admins.update', { admin: admin.id }));
     }, [put, admin.id]);
+
+    const handleDelete = useCallback(() => {
+        destroy(route('admin.account.admins.destroy', { admin: admin.id }));
+    }, [destroy, admin.id]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -125,6 +140,36 @@ export default function Edit({ admin }: EditProps) {
                                     一覧に戻る
                                 </Link>
                                 <Button type="submit" disabled={processing}>更新する</Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            disabled={processing}
+                                        >
+                                            削除する
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                この操作は取り消すことができません。<br />
+                                                管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                                            <AlertDialogAction
+                                                onClick={handleDelete}
+                                                className="bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+                                                disabled={processing}
+                                            >
+                                                削除する
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         </div>
                     </form>

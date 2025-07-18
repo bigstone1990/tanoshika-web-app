@@ -142,16 +142,21 @@ const ActionsCell = memo(({
     onDelete,
     isProcessing
 }: ActionsCellProps) => {
-    const [open, setOpen] = useState(false);
+    const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+
+    const handleSelectDelete = useCallback(() => {
+        setIsDropdownMenuOpen(false);
+        setIsAlertDialogOpen(true);
+    }, []);
 
     const handleDelete = useCallback(() => {
         onDelete(admin.id);
-        setOpen(false);
     }, [onDelete, admin.id]);
 
     return (
         <>
-            <DropdownMenu>
+            <DropdownMenu open={isDropdownMenuOpen} onOpenChange={setIsDropdownMenuOpen}>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
                         <span className="sr-only">Open menu</span>
@@ -183,14 +188,14 @@ const ActionsCell = memo(({
                         <button
                             type="button"
                             className="w-full"
-                            onClick={() => setOpen(true)}
+                            onClick={handleSelectDelete}
                         >
                             削除
                         </button>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
@@ -203,7 +208,7 @@ const ActionsCell = memo(({
                         <AlertDialogCancel>キャンセル</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDelete}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            className="bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
                             disabled={isProcessing}
                         >
                             削除する

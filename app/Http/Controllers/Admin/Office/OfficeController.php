@@ -146,8 +146,24 @@ class OfficeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Office $office): RedirectResponse
     {
-        //
+        try {
+            DB::transaction(function () use ($office) {
+                $office->delete();
+            });
+
+            return to_route('admin.offices.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '削除しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '削除に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 }

@@ -42,6 +42,11 @@ export function AppSidebar() {
                 href: '/admin/offices',
                 icon: Building,
             },
+            {
+                title: "ユーザー管理",
+                href: '/admin/account/users',
+                icon: UserPlus,
+            },
         ];
 
         const userMainNavItems: NavItem[] = [

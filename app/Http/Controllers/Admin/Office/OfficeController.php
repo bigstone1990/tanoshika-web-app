@@ -166,4 +166,35 @@ class OfficeController extends Controller
             ])->withInput();
         }
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:offices,id',
+        ], [
+            'ids.required' => '削除対象を選択してください',
+            'ids.array' => '削除対象の形式が正しくありません',
+            'ids.*.integer' => '無効なIDが含まれています',
+            'ids.*.exists' => '存在しないデータが選択されていたのでページを更新しました。再試行してください。',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                Office::destroy($request->ids);
+            });
+
+            return to_route('admin.offices.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => count($request->ids) . '件のデータを削除しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '一括削除に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
+    }
 }

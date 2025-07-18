@@ -1,7 +1,11 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { useMemo, useCallback } from 'react';
+import { type SharedData, type IndexOffice } from '@/types';
+
+import DataTable from '@/components/data-table';
+import { createColumns } from './columns';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,25 +14,65 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard() {
+const columnLabelMap: Record<string, string> = {
+    id: "ID",
+    name: "名前",
+    kana: "カナ",
+};
+
+const searchableColumns = ['id', 'name', 'kana'];
+
+const keywordPlaceholder = "キーワード検索（ID, 名前, カナ）";
+
+const initialColumnVisibility = {
+    id: true,
+    name: true,
+    kana: false,
+};
+
+interface IndexProps {
+    offices: IndexOffice[];
+}
+
+export default function Index({ offices }: IndexProps) {
+    const { errors } = usePage<SharedData>().props;
+
+    const { delete: destroy, processing } = useForm({});
+
+    const handleDelete = useCallback((id: number) => {
+        destroy(route('admin.offices.destroy', { office: id }), {
+            preserveScroll: true,
+        });
+    }, [destroy]);
+
+    const columns = useMemo(() => createColumns({
+        onDelete: handleDelete,
+        isProcessing: processing
+    }), [handleDelete, processing]);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="事業所一覧" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
+                <div className="flex justify-end">
+                    <Link
+                        href={route('admin.offices.create')}
+                        className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3"
+                    >
+                        新規作成
+                    </Link>
                 </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
+                <DataTable
+                    data={offices}
+                    columns={columns}
+                    errors={errors}
+                    searchableColumns={searchableColumns}
+                    keywordPlaceholder={keywordPlaceholder}
+                    columnLabelMap={columnLabelMap}
+                    initialColumnVisibility={initialColumnVisibility}
+                    bulkDestroyRouteName="admin.offices.bulk-destroy"
+                    deleteDialogDisplayField="name"
+                />
             </div>
         </AppLayout>
     );

@@ -17,6 +17,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified'])->
     });
 
     Route::resource('offices', OfficeController::class);
+    Route::post('offices/bulk-delete', [OfficeController::class, 'bulkDestroy'])->name('offices.bulk-destroy');
 });
 
 require __DIR__.'/adminSettings.php';

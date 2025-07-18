@@ -19,7 +19,13 @@ class OfficeController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('admin/office/index');
+        $offices = Office::select('id', 'name', 'kana')
+            ->orderBy('id')
+            ->get();
+
+        return Inertia::render('admin/office/index', [
+            'offices' => $offices,
+        ]);
     }
 
     /**

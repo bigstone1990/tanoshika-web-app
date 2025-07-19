@@ -10,6 +10,10 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 
+use App\Models\User;
+use App\Models\Office;
+use App\Enums\User\Role;
+
 class UserController extends Controller
 {
     /**
@@ -17,7 +21,22 @@ class UserController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('admin/account/user/index');
+        $users = User::select('id', 'office_id', 'name', 'kana', 'email', 'role')
+            ->with(['office:id,name'])
+            ->orderBy('id')
+            ->get();
+
+        $groupedUsers = $users->groupBy('role');
+
+        $staff = $groupedUsers->get(Role::STAFF->value, collect());
+        $members = $groupedUsers->get(Role::MEMBER->value, collect());
+        $others = $groupedUsers->get(null, collect());
+
+        return Inertia::render('admin/account/user/index', [
+            'staff' => $staff,
+            'members' => $members,
+            'others' => $others,
+        ]);
     }
 
     /**

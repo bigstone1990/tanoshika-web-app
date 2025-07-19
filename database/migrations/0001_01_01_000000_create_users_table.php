@@ -20,6 +20,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->tinyInteger('role')->nullable();
+            $table->boolean('can_manage_jobs');
+            $table->boolean('can_manage_rules');
+            $table->boolean('can_manage_groupings');
             $table->nullableMorphs('creator');
             $table->nullableMorphs('updater');
             $table->rememberToken();

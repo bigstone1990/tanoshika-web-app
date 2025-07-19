@@ -55,3 +55,4 @@ export interface FlashMessage {
 
 export * from './admin';
 export * from './office';
+export * from './user';

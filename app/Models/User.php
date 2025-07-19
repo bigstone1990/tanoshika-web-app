@@ -30,6 +30,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'can_manage_jobs',
+        'can_manage_rules',
+        'can_manage_groupings',
         'creator_id',
         'creator_type',
         'updater_id',
@@ -57,6 +60,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => Role::class,
+            'can_manage_jobs' => 'boolean',
+            'can_manage_rules' => 'boolean',
+            'can_manage_groupings' => 'boolean',
         ];
     }
 
@@ -72,12 +78,12 @@ class User extends Authenticatable
 
     public function creator(): MorphTo
     {
-        return $this->morphTo('creator');
+        return $this->morphTo('creator')->withDefault();
     }
 
     public function updater(): MorphTo
     {
-        return $this->morphTo('updater');
+        return $this->morphTo('updater')->withDefault();
     }
 
     public function createdUsers(): MorphMany

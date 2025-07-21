@@ -42,9 +42,24 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        $roleOptions =  Role::options();
+
+        array_unshift($roleOptions, [
+            'label' => '未設定',
+            'value' => 0,
+        ]);
+
+        $offices = Office::select('id', 'name')
+            ->orderBy('id')
+            ->get()
+            ->prepend(['id' => 0, 'name' => '未所属']);
+
+        return Inertia::render('admin/account/user/create', [
+            'roleOptions' => $roleOptions,
+            'offices' => $offices,
+        ]);
     }
 
     /**

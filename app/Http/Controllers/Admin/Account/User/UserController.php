@@ -206,8 +206,24 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        try {
+            DB::transaction(function () use ($user) {
+                $user->delete();
+            });
+
+            return to_route('admin.account.users.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '削除しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '削除に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 }

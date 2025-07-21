@@ -38,44 +38,49 @@ type FormDataType = {
     can_manage_groupings: boolean;
 };
 
-type PermissionKey = 'can_manage_jobs' | 'can_manage_rules' | 'can_manage_groupings'
+type PermissionKey = 'can_manage_jobs' | 'can_manage_rules' | 'can_manage_groupings';
 
 type Permission = {
-    key: PermissionKey
-    label: string
-    description: string
-}
+    key: PermissionKey;
+    label: string;
+    description: string;
+};
 
 const PERMISSIONS: readonly Permission[] = [
     {
         key: 'can_manage_jobs',
         label: '求人管理機能',
-        description: '求人の管理ができるようになります'
+        description: '求人の管理ができるようになります',
     },
     {
         key: 'can_manage_rules',
         label: 'ルールブック管理機能',
-        description: 'ルールブックの管理ができるようになります'
+        description: 'ルールブックの管理ができるようになります',
     },
     {
         key: 'can_manage_groupings',
         label: 'グループ分け管理機能',
-        description: 'グループ分けの管理ができるようになります'
+        description: 'グループ分けの管理ができるようになります',
     },
-] as const
+] as const;
 
 interface CreateProps {
-    roleOptions: Option[];
+    roles: Option[];
     offices: Office[];
 }
 
-export default function Create({ roleOptions, offices }: CreateProps) {
+export default function Create({ roles, offices }: CreateProps) {
     const officeOptions = useMemo(() => {
-        return offices.map(office => ({
+        const mappedOffices = offices.map(office => ({
             label: office.name,
             value: office.id,
-        }))
-    }, [offices])
+        }));
+        return [{ label: '未所属', value: 0 }, ...mappedOffices];
+    }, [offices]);
+
+    const roleOptions = useMemo(() => {
+        return [{ label: '未設定', value: 0 }, ...roles];
+    }, [roles]);
 
     const { data, setData, post, processing, errors } = useForm<Required<FormDataType>>({
         name: '',
@@ -95,23 +100,23 @@ export default function Create({ roleOptions, offices }: CreateProps) {
 
     const enableAllPermissions = useCallback(() => {
         PERMISSIONS.forEach(permission => {
-            setData(permission.key, true)
-        })
-    }, [setData])
+            setData(permission.key, true);
+        });
+    }, [setData]);
 
     const disableAllPermissions = useCallback(() => {
         PERMISSIONS.forEach(permission => {
-            setData(permission.key, false)
-        })
-    }, [setData])
+            setData(permission.key, false);
+        });
+    }, [setData]);
 
     const areAllPermissionsEnabled = useMemo(() => {
-        return PERMISSIONS.every(permission => data[permission.key] === true)
-    }, [data])
+        return PERMISSIONS.every(permission => data[permission.key] === true);
+    }, [data]);
 
     const areAllPermissionsDisabled = useMemo(() => {
-        return PERMISSIONS.every(permission => data[permission.key] === false)
-    }, [data])
+        return PERMISSIONS.every(permission => data[permission.key] === false);
+    }, [data]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -183,7 +188,6 @@ export default function Create({ roleOptions, offices }: CreateProps) {
 
                                 <Combobox
                                     id="role"
-                                    className="font-normal flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
                                     options={roleOptions}
                                     value={data.role}
                                     onValueChange={(value) => setData('role', value)}
@@ -198,7 +202,6 @@ export default function Create({ roleOptions, offices }: CreateProps) {
 
                                 <Combobox
                                     id="office"
-                                    className="font-normal flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
                                     options={officeOptions}
                                     value={data.office}
                                     onValueChange={(value) => setData('office', value)}
@@ -209,8 +212,8 @@ export default function Create({ roleOptions, offices }: CreateProps) {
                             </div>
 
                             <div className="grid gap-2">
-                                <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    権限設定<span className="text-red-600"> *役割によっては機能の一部が制限されます</span>
+                                <p className="text-sm leading-none font-medium select-none">
+                                    権限設定<span className="text-destructive"> *役割によっては機能の一部が制限されます</span>
                                 </p>
 
                                 <div className="flex gap-2">
@@ -239,10 +242,10 @@ export default function Create({ roleOptions, offices }: CreateProps) {
                                         <div key={permission.key}>
                                             <Label
                                                 htmlFor={permission.key}
-                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs  hover:bg-accent/90 transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                                             >
                                                 <div className="space-y-0.5">
-                                                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                                    <div className="text-sm font-medium select-none">
                                                         {permission.label}<br />
                                                         <span className="text-muted-foreground text-sm font-normal">
                                                             {permission.description}

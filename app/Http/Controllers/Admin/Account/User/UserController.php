@@ -44,20 +44,14 @@ class UserController extends Controller
      */
     public function create(): Response
     {
-        $roleOptions =  Role::options();
-
-        array_unshift($roleOptions, [
-            'label' => '未設定',
-            'value' => 0,
-        ]);
+        $roles =  Role::options();
 
         $offices = Office::select('id', 'name')
             ->orderBy('id')
-            ->get()
-            ->prepend(['id' => 0, 'name' => '未所属']);
+            ->get();
 
         return Inertia::render('admin/account/user/create', [
-            'roleOptions' => $roleOptions,
+            'roles' => $roles,
             'offices' => $offices,
         ]);
     }
@@ -67,7 +61,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

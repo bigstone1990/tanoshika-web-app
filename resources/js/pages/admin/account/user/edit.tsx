@@ -1,10 +1,15 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { FormEventHandler, useCallback, useMemo } from 'react';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { type ShowUser } from '@/types';
+import { type Option, type EditUser } from '@/types';
+
+import Combobox from '@/components/combobox';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,10 +17,26 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/admin/account/users',
     },
     {
-        title: 'ユーザー詳細',
+        title: 'ユーザー編集',
         href: '',
     },
 ];
+
+interface Office {
+    id: number;
+    name: string;
+}
+
+type FormDataType = {
+    name: string;
+    kana: string;
+    role: number | null;
+    office: number | null;
+    can_manage_jobs: boolean;
+    can_manage_rules: boolean;
+    can_manage_groupings: boolean;
+    updated_at: string;
+};
 
 type PermissionKey = 'can_manage_jobs' | 'can_manage_rules' | 'can_manage_groupings';
 
@@ -43,27 +64,77 @@ const PERMISSIONS: readonly Permission[] = [
     },
 ] as const;
 
-interface ShowProps {
-    user: ShowUser;
+interface EditProps {
+    user: EditUser;
+    roles: Option[];
+    offices: Office[];
 }
 
-export default function Show({ user }: ShowProps) {
+export default function Edit({ user, roles, offices }: EditProps) {
+    const officeOptions = useMemo(() => {
+        const mappedOffices = offices.map(office => ({
+            label: office.name,
+            value: office.id,
+        }));
+        return [{ label: '未所属', value: 0 }, ...mappedOffices];
+    }, [offices]);
+
+    const roleOptions = useMemo(() => {
+        return [{ label: '未設定', value: 0 }, ...roles];
+    }, [roles]);
+
+    const { data, setData, put, processing, errors } = useForm<Required<FormDataType>>({
+        name: user.name,
+        kana: user.kana,
+        role: user.role,
+        office: user.office_id,
+        can_manage_jobs: user.can_manage_jobs,
+        can_manage_rules: user.can_manage_rules,
+        can_manage_groupings: user.can_manage_groupings,
+        updated_at: user.updated_at,
+    });
+
+    const submit: FormEventHandler = useCallback((e) => {
+        e.preventDefault();
+        put(route('admin.account.users.update', { user: user.id }))
+    }, [put, user.id]);
+
+    const enableAllPermissions = useCallback(() => {
+        PERMISSIONS.forEach(permission => {
+            setData(permission.key, true);
+        });
+    }, [setData]);
+
+    const disableAllPermissions = useCallback(() => {
+        PERMISSIONS.forEach(permission => {
+            setData(permission.key, false);
+        });
+    }, [setData]);
+
+    const areAllPermissionsEnabled = useMemo(() => {
+        return PERMISSIONS.every(permission => data[permission.key] === true);
+    }, [data]);
+
+    const areAllPermissionsDisabled = useMemo(() => {
+        return PERMISSIONS.every(permission => data[permission.key] === false);
+    }, [data]);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="ユーザー詳細" />
+            <Head title="ユーザー編集" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <section className="max-w-xl">
                     <header className="flex flex-col space-y-1.5">
                         <h2 className="font-semibold tracking-tight text-xl">
-                            ユーザー詳細
+                            ユーザー編集
                         </h2>
 
                         <p className="text-sm text-muted-foreground">
-                            ユーザーの詳細を確認できます。
+                            ユーザーを編集できます。
                         </p>
                     </header>
 
-                    <div className="mt-6">
+                    <form onSubmit={submit} className="mt-6">
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="id">ID</Label>
@@ -72,7 +143,7 @@ export default function Show({ user }: ShowProps) {
                                     id="id"
                                     type="text"
                                     value={user.id}
-                                    readOnly
+                                    disabled
                                 />
                             </div>
 
@@ -82,9 +153,15 @@ export default function Show({ user }: ShowProps) {
                                 <Input
                                     id="name"
                                     type="text"
-                                    value={user.name}
-                                    readOnly
+                                    value={data.name}
+                                    autoComplete="name"
+                                    autoFocus
+                                    placeholder="ユーザー"
+                                    required
+                                    onChange={(e) => setData('name', e.target.value)}
                                 />
+
+                                <InputError message={errors.name} />
                             </div>
 
                             <div className="grid gap-2">
@@ -93,9 +170,14 @@ export default function Show({ user }: ShowProps) {
                                 <Input
                                     id="kana"
                                     type="text"
-                                    value={user.kana}
-                                    readOnly
+                                    value={data.kana}
+                                    autoComplete="kana"
+                                    placeholder="ユーザー"
+                                    required
+                                    onChange={(e) => setData('kana', e.target.value)}
                                 />
+
+                                <InputError message={errors.kana} />
                             </div>
 
                             <div className="grid gap-2">
@@ -105,30 +187,36 @@ export default function Show({ user }: ShowProps) {
                                     id="email"
                                     type="email"
                                     value={user.email}
-                                    readOnly
+                                    disabled
                                 />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="role">役割</Label>
 
-                                <Input
+                                <Combobox
                                     id="role"
-                                    type="text"
-                                    value={user.role}
-                                    readOnly
+                                    options={roleOptions}
+                                    value={data.role}
+                                    onValueChange={(value) => setData('role', value)}
+                                    placeholder="役割を選択してください..."
                                 />
+
+                                <InputError message={errors.role} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="office">所属事業所</Label>
 
-                                <Input
+                                <Combobox
                                     id="office"
-                                    type="text"
-                                    value={user.office}
-                                    readOnly
+                                    options={officeOptions}
+                                    value={data.office}
+                                    onValueChange={(value) => setData('office', value)}
+                                    placeholder="所属事業所を選択してください..."
                                 />
+
+                                <InputError message={errors.office} />
                             </div>
 
                             <div className="grid gap-2">
@@ -136,12 +224,33 @@ export default function Show({ user }: ShowProps) {
                                     権限設定<span className="text-destructive"> *役割によっては機能の一部が制限されます</span>
                                 </p>
 
+                                <div className="flex gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={enableAllPermissions}
+                                        disabled={areAllPermissionsEnabled}
+                                    >
+                                        全て有効
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={disableAllPermissions}
+                                        disabled={areAllPermissionsDisabled}
+                                    >
+                                        全て無効
+                                    </Button>
+                                </div>
+
                                 <div className="space-y-4">
                                     {PERMISSIONS.map(permission => (
                                         <div key={permission.key}>
                                             <Label
                                                 htmlFor={permission.key}
-                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs  hover:bg-accent/90 transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                                             >
                                                 <div className="space-y-0.5">
                                                     <div className="text-sm font-medium select-none">
@@ -153,56 +262,19 @@ export default function Show({ user }: ShowProps) {
                                                 </div>
                                                 <Switch
                                                     id={permission.key}
-                                                    checked={user[permission.key]}
+                                                    checked={data[permission.key]}
+                                                    onCheckedChange={(checked) => setData(permission.key, checked)}
                                                 />
                                             </Label>
+
+                                            <InputError message={errors[permission.key]} />
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="created_at">作成日時</Label>
-
-                                <Input
-                                    id="created_at"
-                                    type="text"
-                                    value={user.created_at}
-                                    readOnly
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="creator">作成者</Label>
-
-                                <Input
-                                    id="creator"
-                                    type="text"
-                                    value={user.creator ?? 'なし'}
-                                    readOnly
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="updated_at">更新日時</Label>
-
-                                <Input
-                                    id="updated_at"
-                                    type="text"
-                                    value={user.updated_at}
-                                    readOnly
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="updater">更新者</Label>
-
-                                <Input
-                                    id="updater"
-                                    type="text"
-                                    value={user.updater ?? 'なし'}
-                                    readOnly
-                                />
+                                <InputError message={errors.updated_at} />
                             </div>
 
                             <div className="flex items-center gap-4">
@@ -212,15 +284,10 @@ export default function Show({ user }: ShowProps) {
                                 >
                                     一覧に戻る
                                 </Link>
-                                <Link
-                                    href={route('admin.account.users.edit', { user: user.id })}
-                                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3"
-                                >
-                                    編集する
-                                </Link>
+                                <Button type="submit" disabled={processing}>更新する</Button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </section>
             </div>
         </AppLayout>

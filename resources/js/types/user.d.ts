@@ -34,3 +34,16 @@ export interface ShowUser {
     updated_at: string;
     updater: string | null;
 }
+
+export interface EditUser {
+    id: number;
+    office_id: number | null;
+    name: string;
+    kana: string;
+    email: string;
+    role: number | null;
+    can_manage_jobs: boolean;
+    can_manage_rules: boolean;
+    can_manage_groupings: boolean;
+    updated_at: string;
+}

@@ -135,9 +135,30 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user): Response
     {
-        //
+        $roles =  Role::options();
+
+        $offices = Office::select('id', 'name')
+            ->orderBy('id')
+            ->get();
+
+        return Inertia::render('admin/account/user/edit', [
+            'user' => [
+                'id' => $user->id,
+                'office_id' => $user->office_id,
+                'name' => $user->name,
+                'kana' => $user->kana,
+                'email' => $user->email,
+                'role' => $user->role,
+                'can_manage_jobs' => $user->can_manage_jobs,
+                'can_manage_rules' => $user->can_manage_rules,
+                'can_manage_groupings' => $user->can_manage_groupings,
+                'updated_at' => $user->updated_at->format('Y-m-d H:i:s'),
+            ],
+            'roles' => $roles,
+            'offices' => $offices,
+        ]);
     }
 
     /**
@@ -145,7 +166,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($request, $id);
     }
 
     /**

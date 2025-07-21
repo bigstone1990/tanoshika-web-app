@@ -119,8 +119,8 @@ class UserController extends Controller
                 'name' => $user->name,
                 'kana' => $user->kana,
                 'email' => $user->email,
-                'role' => $user->role ? $user->role->label() : '未設定',
-                'office' => $user->office ? $user->office->name : '未所属',
+                'role' => $user->role?->label() ?? '未設定',
+                'office' => $user->office?->name ?? '未所属',
                 'can_manage_jobs' => $user->can_manage_jobs,
                 'can_manage_rules' => $user->can_manage_rules,
                 'can_manage_groupings' => $user->can_manage_groupings,
@@ -164,9 +164,43 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        dd($request, $id);
+        try {
+            DB::transaction(function () use ($request, $user) {
+                if ($user->updated_at->format('Y-m-d H:i:s') !== $request->updated_at) {
+                    throw new OptimisticLockException;
+                }
+
+                $user->office_id = intval($request->office) === 0 ? null : intval($request->office);
+                $user->name = $request->name;
+                $user->kana = $request->kana;
+                $user->role = intval($request->role) === 0 ? null : intval($request->role);
+                $user->can_manage_jobs = $request->can_manage_jobs;
+                $user->can_manage_rules = $request->can_manage_rules;
+                $user->can_manage_groupings = $request->can_manage_groupings;
+                $user->updater()->associate(Auth::guard('admin')->user());
+                $user->save();
+            });
+
+            return to_route('admin.account.users.show', ['user' => $user->id])->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '更新しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (OptimisticLockException $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => $e->getMessage(),
+                'flash_status' => 'error',
+            ])->withInput();
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '更新に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 
     /**

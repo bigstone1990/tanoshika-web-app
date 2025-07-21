@@ -9,6 +9,13 @@ use App\Http\Requests\Admin\Account\User\UpdateUserRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Exception;
+use App\Jobs\SendUserCreatedMail;
+use App\Exceptions\OptimisticLockException;
 
 use App\Models\User;
 use App\Models\Office;
@@ -59,9 +66,44 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        dd($request);
+        try {
+            $password = Str::random(8);
+            $user = null;
+
+            DB::transaction(function () use ($request, &$user, $password) {
+                $user = User::create([
+                    'office_id' => intval($request->office) === 0 ? null : intval($request->office),
+                    'name' => $request->name,
+                    'kana' => $request->kana,
+                    'email' => $request->email,
+                    'password' => Hash::make($password),
+                    'role' => intval($request->role) === 0 ? null : intval($request->role),
+                    'can_manage_jobs' => $request->can_manage_jobs,
+                    'can_manage_rules' => $request->can_manage_rules,
+                    'can_manage_groupings' => $request->can_manage_groupings,
+                    'creator_id' => Auth::guard('admin')->id(),
+                    'creator_type' => get_class(Auth::guard('admin')->user()),
+                    'updater_id' => Auth::guard('admin')->id(),
+                    'updater_type' => get_class(Auth::guard('admin')->user()),
+                ]);
+            });
+
+            SendUserCreatedMail::dispatch($user, $password);
+
+            return to_route('admin.account.users.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '登録しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '登録に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 
     /**

@@ -109,9 +109,27 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user): Response
     {
-        //
+        $user->load(['office', 'creator', 'updater']);
+
+        return Inertia::render('admin/account/user/show', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'kana' => $user->kana,
+                'email' => $user->email,
+                'role' => $user->role ? $user->role->label() : '未設定',
+                'office' => $user->office ? $user->office->name : '未所属',
+                'can_manage_jobs' => $user->can_manage_jobs,
+                'can_manage_rules' => $user->can_manage_rules,
+                'can_manage_groupings' => $user->can_manage_groupings,
+                'created_at' => $user->created_at->format('Y-m-d H:i:s'),
+                'creator' => $user->creator->name,
+                'updated_at'=> $user->updated_at->format('Y-m-d H:i:s'),
+                'updater' => $user->updater->name,
+            ],
+        ]);
     }
 
     /**

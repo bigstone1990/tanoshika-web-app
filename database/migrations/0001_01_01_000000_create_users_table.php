@@ -13,13 +13,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('office_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('office_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
             $table->string('kana');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->tinyInteger('role')->nullable();
+            $table->boolean('can_manage_jobs');
+            $table->boolean('can_manage_rules');
+            $table->boolean('can_manage_groupings');
+            $table->nullableMorphs('creator');
+            $table->nullableMorphs('updater');
             $table->rememberToken();
             $table->timestamps();
         });

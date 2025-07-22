@@ -38,6 +38,8 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        $request->user()->updater_id = Auth::guard('admin')->id();
+
         $request->user()->save();
 
         return to_route('admin.profile.edit');

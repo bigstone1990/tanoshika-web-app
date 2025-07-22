@@ -27,7 +27,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 href: '/admin/settings/appearance',
                 icon: null,
             },
-        ]
+        ];
 
         const userSidebarNavItems: NavItem[] = [
             {
@@ -45,7 +45,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 href: '/settings/appearance',
                 icon: null,
             },
-        ]
+        ];
 
         return auth.guard === 'admin' ? adminSidebarNavItems : userSidebarNavItems;
     }, [auth.guard]);
@@ -59,7 +59,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
     return (
         <div className="px-4 py-6">
-            <Heading title="設定" description="プロフィール設定とアカウント設定を管理する" />
+            <Heading title="設定" description="アカウント設定を管理する" />
 
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">

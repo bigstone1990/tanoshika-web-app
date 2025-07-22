@@ -43,7 +43,7 @@ export default function Profile({ mustVerifyEmail, status, role }: { mustVerifyE
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="プロフィール情報" description="メールアドレスを更新できます" />
+                    <HeadingSmall title="プロフィール設定" description="メールアドレスを変更できます" />
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">

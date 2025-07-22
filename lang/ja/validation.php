@@ -260,6 +260,12 @@ return [
         'updated_at' => '更新日',
         'username' => 'ユーザー名',
         'year' => '年',
+        // カスタマイズ
+        'kana'=> 'カナ',
+        'office' => '事業所',
+        'can_manage_jobs' => '求人管理機能',
+        'can_manage_rules' => 'ルールブック管理機能',
+        'can_manage_groupings' => 'グループ分け管理機能',
     ],
 
 ];

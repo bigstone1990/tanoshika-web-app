@@ -21,7 +21,7 @@ export default function Appearance() {
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="外観設定" description="外観の設定を変更できます" />
+                    <HeadingSmall title="外観設定" description="外観を変更できます" />
                     <AppearanceTabs />
                 </div>
             </SettingsLayout>

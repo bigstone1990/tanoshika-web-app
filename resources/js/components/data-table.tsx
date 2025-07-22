@@ -92,7 +92,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
                     .filter(key => key !== 'id');
 
             const keywords = value
-                .split(/[\s　]+/)
+                .split(/[\s\u3000]+/)
                 .map(k => k.trim().toLowerCase())
                 .filter(Boolean);
 

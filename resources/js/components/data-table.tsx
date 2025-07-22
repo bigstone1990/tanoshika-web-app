@@ -78,9 +78,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialColumnVisibility);
     const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
-
     const [globalFilter, setGlobalFilter] = React.useState("");
-
     const [open, setOpen] = React.useState(false);
     const [isProcessing, setIsProcessing] = React.useState(false);
 

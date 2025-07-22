@@ -1,7 +1,7 @@
 <svg width="166" height="166" viewBox="0 0 166 166" xmlns="http://www.w3.org/2000/svg">
-  <rect x="10.4" y="10.4" width="145.2" height="145.2" rx="29.16" ry="29.16" fill="#096FC6"/>
-  <g fill="white">
-    <rect x="36.29" y="41.47" width="93.42" height="23.33" rx="3.89" ry="3.89"/>
-    <rect x="71.29" y="41.47" width="23.33" height="93.42" rx="3.89" ry="3.89"/>
-  </g>
+  <!-- 背景 (角丸) -->
+  <rect width="166" height="166" rx="24" ry="24" fill="#096FC6" />
+
+  <!-- 'T'の字 (図形) -->
+  <path d="M30 30 H136 V60 H98 V136 H68 V60 H30 Z" fill="#FFFFFF" />
 </svg>

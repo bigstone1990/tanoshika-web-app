@@ -1,4 +1,4 @@
-import AppLogoIcon from '@/components/app-logo-icon';
+import AppLogoFull from '@/components/app-logo-full';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 
@@ -16,7 +16,7 @@ export default function AuthSimpleLayout({ children, title, description }: Props
                     <div className="flex flex-col items-center gap-4">
                         <div className="flex flex-col items-center gap-2 w-full font-medium">
                             <div className="mb-1 flex w-full items-center justify-center rounded-md">
-                                <AppLogoIcon className="w-full fill-current text-[var(--foreground)] dark:text-white" />
+                                <AppLogoFull className="w-full fill-current text-[var(--foreground)] dark:text-white" />
                             </div>
                             <span className="sr-only">{title}</span>
                         </div>

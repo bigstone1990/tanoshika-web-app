@@ -1,6 +1,6 @@
 import { SVGAttributes } from 'react';
 
-export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
+export default function AppLogoFull(props: SVGAttributes<SVGElement>) {
     return (
         <svg {...props} viewBox="0 0 4410 519" xmlns="http://www.w3.org/2000/svg">
             <g
